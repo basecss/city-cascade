@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>三级城市联动</title>
+</head>
+<body>
+<select name="" id="province"></select>
+<select name="" id="city"></select>
+<select name="" id="county"></select>
+<script type="text/javascript" src="src/sitedata_bas.js"></script>
+<script type="text/javascript">
+function $(id) {
+	return document.getElementById(id);
+}
+
+var province = $('province'),
+	city = $('city'),
+	county = $('county'),
+	cityList = []; // city cache
+
+var provinceArr = arrCity.map(function(item){
+	return '<option value="' + item.name + '">' + item.name + '</option>';
+});
+province.innerHTML = provinceArr.join();
+
+function createCitys(citys) {
+	var cityArr = citys.map(function(city){
+		return '<option value"' + city.name + '">' + city.name + '</option>';
+	});
+	city.innerHTML = cityArr.join();
+}
+
+function createCountys(countys) {
+	var countyArr = countys.map(function(county){
+		return '<option value"' + county.name + '">' + county.name + '</option>';
+	});
+	county.innerHTML = countyArr.join();
+}
+
+function updateCitys() {
+	var currProvince = province.value,
+		citys = [];
+    
+	arrCity.forEach(function(item){
+		if(item.name === currProvince && item.sub && item.sub.length) {
+			citys = item.sub;
+			cityList = item.sub;
+		}
+	});
+	createCitys(citys);
+}
+
+function updateCountys() {
+	var currCity = city.value,
+		countys = [];
+
+	cityList.forEach(function(item){
+		if(item.name === currCity && item.sub && item.sub.length) {
+			countys = item.sub;
+		}
+	});
+	createCountys(countys);
+}
+// init
+updateCitys();
+updateCountys();
+
+// select change
+province.addEventListener('change', updateCitys, false);
+province.addEventListener('change', updateCountys, false);
+city.addEventListener('change', updateCountys, false);
+</script>	
+</body>
+</html>
