@@ -8,4 +8,4 @@
 ## 预览：
 
 + <http://jsfiddle.net/basecss/kPSjP/>
-+ <https://rawgithub.com/basecss/city-cascade/master/index.html>
++ <https://rawgit.com/basecss/city-cascade/master/index.html>
