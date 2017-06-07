@@ -1,11 +1,10 @@
 # 三级城市联动
 ============
 
-## 数据来源：
+## Data Source
 
 + <http://passport.baidu.com/js/sitedata_bas.js>
 
-## 预览：
+## Example
 
-+ <http://jsfiddle.net/basecss/kPSjP/>
 + <https://rawgit.com/basecss/city-cascade/master/index.html>
