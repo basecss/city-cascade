@@ -5,71 +5,59 @@
 <title>三级城市联动</title>
 </head>
 <body>
-<select name="" id="province"></select>
-<select name="" id="city"></select>
-<select name="" id="county"></select>
-<script type="text/javascript" src="src/sitedata_bas.js"></script>
+<select name="" id="province">
+  <option value="请选择">请选择</option>
+</select>
+<select name="" id="city">
+  <option value="请选择">请选择</option>
+</select>
+<select name="" id="county">
+  <option value="请选择">请选择</option>
+</select>
+<!-- city data -->
+<script type="text/javascript" src="data/sitedata_bas.js"></script>
 <script type="text/javascript">
-function $(id) {
-	return document.getElementById(id);
+function query (selector) {
+  return document.querySelector(selector)
 }
 
-var province = $('province'),
-	city = $('city'),
-	county = $('county'),
-	cityList = []; // city cache
+var provinceElement = query('#province')
+var cityElement = query('#city')
+var countyElement = query('#county')
+var cityData
 
-var provinceArr = arrCity.map(function(item){
-	return '<option value="' + item.name + '">' + item.name + '</option>';
-});
-province.innerHTML = provinceArr.join();
+// fill select options
+function selectFill (data, element) {
+  var html = data.length ? data.map(function (item) {
+    return '<option value="' + item.name + '">' + item.name + '</option>'
+  }).join('') : ''
+  element.innerHTML = html
+}
+selectFill(sourceData, provinceElement)
 
-function createCitys(citys) {
-	var cityArr = citys.map(function(city){
-		return '<option value"' + city.name + '">' + city.name + '</option>';
-	});
-	city.innerHTML = cityArr.join();
+// update select
+function update () {
+  var id = this.id
+  var currValue = this.value
+  if (id === 'province') {
+    cityData = sourceData.filter(function (item) {
+      return item.name === currValue
+    })
+    cityData = cityData.length ? cityData[0]['sub'] : []
+    selectFill(cityData, cityElement)
+    selectFill([], countyElement)
+  } else if (id === 'city') {
+    var countyData = cityData.filter(function (item) {
+      return item.name === currValue
+    })
+    countyData = countyData[0]['sub'] ? countyData[0]['sub'] : []
+    selectFill(countyData, countyElement)
+  }
 }
 
-function createCountys(countys) {
-	var countyArr = countys.map(function(county){
-		return '<option value"' + county.name + '">' + county.name + '</option>';
-	});
-	county.innerHTML = countyArr.join();
-}
-
-function updateCitys() {
-	var currProvince = province.value,
-		citys = [];
-    
-	arrCity.forEach(function(item){
-		if(item.name === currProvince && item.sub && item.sub.length) {
-			citys = item.sub;
-			cityList = item.sub;
-		}
-	});
-	createCitys(citys);
-}
-
-function updateCountys() {
-	var currCity = city.value,
-		countys = [];
-
-	cityList.forEach(function(item){
-		if(item.name === currCity && item.sub && item.sub.length) {
-			countys = item.sub;
-		}
-	});
-	createCountys(countys);
-}
-// init
-updateCitys();
-updateCountys();
-
-// select change
-province.addEventListener('change', updateCitys, false);
-province.addEventListener('change', updateCountys, false);
-city.addEventListener('change', updateCountys, false);
-</script>	
+// change event
+province.addEventListener('change', update, false)
+city.addEventListener('change', update, false)
+</script> 
 </body>
 </html>
